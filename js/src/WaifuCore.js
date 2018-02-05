@@ -55,8 +55,6 @@ class WaifuCore {
 	draw () {
 		this.context.drawImage (this.testImg, 0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
 		this.context.drawImage (this.textboxImage, 50, 300, 1180, 300);
-		// this.context.fillStyle = "#000";
-		// this.context.fillRect (0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
 		this.context.fillStyle = "#fff";
 		this.context.font = "16px Arial";
 		for (var i = 0; i < this.renderText.length; i++) {
@@ -65,7 +63,5 @@ class WaifuCore {
 		
 		this.context.font = "30px Arial";
 		this.context.fillText ("FPS: " + (1000 / this.fpsDelta).toFixed(0), 1100, 50);
-		// this.context.font = "70px Arial";
-		// this.context.fillText("How's it goin'?\nasdsad", this.x, this.y);
 	}
 }
