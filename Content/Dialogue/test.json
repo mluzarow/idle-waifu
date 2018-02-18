@@ -1,0 +1,16 @@
+{
+	"sectionText" : [
+		{
+			"characterID" : "char01",
+			"characterText" : "Hello. I am character one and this is my text. As you can imagine I have a lot to say and it will span quite far. Hopefully you will have the time and patience to listen to me in full as I may be able to impart onto you some quite useful information regarding how this text works. Wow this really is a massive amount of text that is required to fill this entire space. Just think about it; I need to fill enough space to do this at least twice! Absolutely amazing. Oh, I did it-- I filled one entire line and have looped around to other end. Hurray! This is very good news for me. But anyway, back to the game. Hey, have you ever tried fried ravioli? I tastes absolutely amazing. It's also rather difficult to prepare, unfortunately. If you ever have the time, I would highly suggest it. I'm certain everyone you make it for will love it. There's only a little bit left for this line so I might as well go for it a wrap around the last time. Please, don't clap for me for I am already ravioli."
+		},
+		{
+			"characterID" : "char02",
+			"characterText" : "Hello, it's me. I'm character two. I don't say much; I'm simply here to break up text flow!"
+		},
+		{
+			"characterID" : "char01",
+			"characterText" : "It's me again! Character 1! Nice to meet you again!"
+		}
+	]
+}
