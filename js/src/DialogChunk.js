@@ -1,29 +1,55 @@
 class DialogChunk {
-	constructor (rawDialog, dialogBoxWidth, context) {
-		this.dialogBoxWidth = dialogBoxWidth;
-		this.context = context;
-		this.processedText = this.processRawDialog (rawDialog);
+	constructor (characterID, characterText) {
+		this.characterID = characterID;
+		this.characterText = characterText;
+		
+		// this.ciCharacter= -1;
+		// this.ciLine = -1;
+		this.ciSection = -1;
 	}
 	
-	processRawDialog (rawDialog) {
-		var split_text = rawDialog.split (' ');
-		var testLine = "";
-		var renderText = [];
-		
-		for (var i = 0; i < split_text.length; i++) {
-			var currentLine = testLine + " " + split_text[i];
-			var lineLength = this.context.measureText (currentLine).width;
-			
-			if (lineLength >= this.dialogBoxWidth) {
-				renderText.push (testLine);
-				testLine = split_text[i];
-			} else if (i === (split_text.length - 1)) {
-				renderText.push (currentLine);
-			} else {
-				testLine = currentLine;
-			}
-		}
-		
-		return renderText;
+	getCharacterName () {
+		return (this.characterID);
 	}
+	
+	getCharacterText () {
+		return (this.characterText);
+	}
+	
+	getNextSection () {
+		// If there exists a next section, get it
+		if (this.characterText.length > (this.ciSection + 1)) {
+			this.ciSection += 1;
+			return (this.characterText[this.ciSection]);
+		} else {
+			// No more sections
+			return (null);
+		}
+	}
+	
+	// feedNextCharacter () {
+	// 	// Check if next character exists
+	// 	if (this.characterText[this.ciSection][this.ciLine].length > (this.ciCharacter + 1)) {
+	// 		this.ciCharacter += 1;
+	// 	// No more characters; check if next line exists
+	// 	} else if (this.characterText[this.ciSection].length > (this.ciLine + 1)) {
+	// 		return (-1);
+	// 	// No more lines; check if next section exists
+	// 	} else if (this.characterText.length > (this.ciSection + 1)) {
+	// 		return (-2);
+	// 	// No more dialog
+	// 	} else {
+	// 		return (-3);
+	// 	}
+	// 
+	// 	return (this.characterText[this.ciSection][this.ciLine][this.ciCharacter]);
+	// }
+	
+	// slotNextLine () {
+	// 	this.ciLine += 1;
+	// }
+	// 
+	// slotNextSection () {
+	// 	this.ciSection += 1;
+	// }
 }

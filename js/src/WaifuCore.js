@@ -31,6 +31,17 @@ class WaifuCore {
 		 */
 		this.fpsDelta = 0;
 		this.lastIteration = Date.now ();
+		
+		this.dialogManager = new DialogManager (1170, 300, "24px Arial");
+		
+		console.info (
+			"~~~~~ Initializing Waifu Core ~~~~~\n" +
+			"====================================\n" +
+			"Render Width:  " + this.CANVAS_WIDTH + "\n" +
+			"Render Height: " + this.CANVAS_HEIGHT + "\n" +
+			"Framerate Cap: " + this.fpsMax + "\n" +
+			"Dialogue Manager: " + ((this.dialogManager instanceof DialogManager) ? "Initialized" : "Failure") + "\n"
+		);
 	}
 	
 	/**
@@ -45,32 +56,68 @@ class WaifuCore {
 		// Text pre-processing
 		this.renderText = [""];
 		this.context.font = "16px Arial";
+		this.loadNextText = true;
 		
-		var test_text = "\"On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their duty through weakness of will, which is the same as saying through shrinking from toil and pain. These cases are perfectly simple and easy to distinguish. In a free hour, when our power of choice is untrammelled and when nothing prevents our being able to do what we like best, every pleasure is to be welcomed and every pain avoided. But in certain circumstances and owing to the claims of duty or the obligations of business it will frequently occur that pleasures have to be repudiated and annoyances accepted. The wise man therefore always holds in these matters to this principle of selection: he rejects pleasures to secure other greater pleasures, or else he endures pains to avoid worse pains.\"";
+		this.dialogManager.loadDialogue ("test");
 		
-		var testChunk = new DialogChunk (test_text, 1150, this.context);
-		this.processedText = testChunk.processedText;
-		this.printInterval = setInterval (this.printText.bind(this), 3000 / this.fpsMax);
+		// var testChunk = new DialogChunk (test_text, 1150, this.context);
+		// this.processedText = testChunk.processedText;
+		// this.printInterval = setInterval (this.printText.bind(this), 3000 / this.fpsMax);
 		
 		setInterval (this.update.bind(this), 1000 / this.fpsMax);
 	}
 	
-	printText () {
-		this.renderText[this.renderText.length - 1] += this.processedText[0].substring (0, 1);
-		this.processedText[0] = this.processedText[0].substring (1, this.processedText[0].length);
-		
-		if (this.processedText[0].length < 1) {
-			this.processedText.shift ();
+	/**
+	 * Slowly feeds characters into the text render buffer in order to simulate
+	 * typing.
+	 */
+	// printText () {
+	// 	var nextChar = this.dialogManager.dialog[0].substring (0, 1);
+	// 
+	// 	if (typeof nextChar === "integer") {
+	// 		if (nextChar === -1) {
+	// 			// Next line
+	// 		} else if (nextChar === -2) {
+	// 			// Next section
+	// 		} else if (nextChar === -3) {
+	// 			// Done printing
+	// 		}
+	// 	} 
+	// 
+	// 	this.renderText[0][this.renderText[0].length - 1] += this.dialogManager.dialog[0].feedNextCharacter ();
+	// 	this.processedText[0] = this.processedText[0].substring (1, this.processedText[0].length);
+	// 
+	// 	if (this.processedText[0].length < 1) {
+	// 		this.processedText.shift ();
+	// 
+	// 		if (this.processedText.length < 1) {
+	// 			clearInterval (this.printInterval);
+	// 		} else {
+	// 			this.renderText.push ("");
+	// 		}
+	// 	}
+	// }
+	
+	/**
+	 * Update called every frame.
+	 */
+	update () {
+		if (this.loadNextText === true) {
+			this.loadNextText = false;
 			
-			if (this.processedText.length < 1) {
-				clearInterval (this.printInterval);
+			console.debug ("Loading next dialog section.");
+			let sectionText = this.dialogManager.dialog[0].getNextSection ();
+			
+			if (sectionText === null) {
+				// probably do more stuff here
+				console.debug ("sectionText is null.");
 			} else {
-				this.renderText.push ("");
+				console.debug ("renderText set to:");
+				console.debug (sectionText);
+				this.renderText = sectionText;
 			}
 		}
-	}
-	
-	update () {
+		
 		var currentIteration = Date.now ();
 		var localDelta = currentIteration - this.lastIteration;
 		this.fpsDelta += (localDelta - this.fpsDelta) / 20;
@@ -78,11 +125,15 @@ class WaifuCore {
 		this.draw ();
 	}
 	
+	/**
+	 * Draws the current frame to the canvas.
+	 */
 	draw () {
 		this.context.drawImage (this.testImg, 0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
 		this.context.drawImage (this.textboxImage, 50, 300, 1180, 300);
+		
 		this.context.fillStyle = "#fff";
-		this.context.font = "16px Arial";
+		this.context.font = this.dialogManager.getDialogFont ();
 		for (var i = 0; i < this.renderText.length; i++) {
 			this.context.fillText (this.renderText[i], 60, 320 + (20 * i));
 		}
